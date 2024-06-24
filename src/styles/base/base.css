@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
 :root {
   --background: #f9f9f9;
   --modalBackground: #fff;
@@ -16,7 +17,6 @@
   --scrollBarTrackBg: #1e1c2a;
 }
 
-@layer base {
   h1, h2 {
     @apply font-bold;
   }
