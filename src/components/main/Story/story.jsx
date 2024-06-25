@@ -8,6 +8,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { api } from "../../../services/fetcher";
 
 function Story(props) {
   const handleClickOpen = () => {
@@ -31,7 +32,7 @@ function Story(props) {
     const fetchData = async () => {
       try {
         const res = await axios({
-          url: "https://localhost:4000/api/v1/feed/story",
+          url: `${api}/feed/story`,
           method: "get",
         });
         const result = await res.data?.data?.filter(

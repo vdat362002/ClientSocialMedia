@@ -126,7 +126,7 @@ const Messages = ({ isAuth }) => {
     }
 
     const toggleMessages = () => {
-        const url = 'https://localhost:3200';
+        const url = process.env.REACT_APP_MESSENGER_URL;
         window.open(url, '_blank');
 
         // setMessagesOpen(!isMessagesOpen);

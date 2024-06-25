@@ -6,8 +6,9 @@ import {
   AudioMutedOutlined,
 } from "@ant-design/icons";
 import io from "socket.io-client";
+import { SocialMediaUrl } from "../../../services/fetcher";
 
-const socket = io("https://localhost:4000");
+const socket = io(SocialMediaUrl);
 
 const CallComponent = () => {
   const [micOn, setMicOn] = useState(true);

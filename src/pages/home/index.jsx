@@ -28,6 +28,7 @@ import socket from "../../socket/socket";
 import SideMenu from "./SideMenu";
 import * as Tab from "../profile/Tabs";
 import axios from "axios";
+import { api } from "../../services/fetcher";
 
 const Home = (props) => {
   const state = useSelector(
@@ -103,7 +104,7 @@ const Home = (props) => {
       // console.log(data)
       try {
         const res = await axios({
-          url: "https://localhost:4000/api/v1/feed?offset=0",
+          url: `${api}/feed?offset=0`,
           method: "get",
         });
         console.log(res.data.data);

@@ -3,11 +3,14 @@ import axios, { AxiosRequestConfig } from "axios";
 import store from "../redux/store/store";
 import { logoutStart } from "../redux/action/authActions";
 
-const SocialMediaUrl =
+export const SocialMediaUrl =
   process.env.REACT_APP_SocialMedia_URL || "https://localhost:4000";
 const SocialMediaApiVersion =
   process.env.REACT_APP_SocialMedia_API_VERSION || "v1";
-axios.defaults.baseURL = `${SocialMediaUrl}/api/${SocialMediaApiVersion}`;
+
+export const api = `${SocialMediaUrl}/api/${SocialMediaApiVersion}`;
+
+axios.defaults.baseURL = api;
 axios.defaults.withCredentials = true;
 
 let isLogoutTriggered = false;
