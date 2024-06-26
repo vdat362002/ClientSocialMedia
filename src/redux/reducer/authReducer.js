@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UPDATE_AUTH_PICTURE } from '../../constants/actionType';
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UPDATE_AUTH_INFO, UPDATE_AUTH_PICTURE } from '../../constants/actionType';
 
 const initState = {
     id: '',
@@ -19,6 +19,12 @@ const authReducer = (state = initState, action) => {
             return {
                 ...state,
                 profilePicture: action.payload
+            }
+        case UPDATE_AUTH_INFO:
+            const { payload: user } = action;
+            return {
+                ...state,
+                fullname: user.fullname,
             }
         default:
             return state;

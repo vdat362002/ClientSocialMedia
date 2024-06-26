@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useDidMount, useDocumentTitle } from '../../../hooks';
 import { updateProfileInfo } from '../../../redux/action/profileActions';
 import { updateUser } from '../../../services/api';
+import { updateAuthInfo } from '../../../redux/action/authActions';
 
 const EditInfo = ({ isOwnProfile, profile }) => {
     const [isUpdating, setIsUpdating] = useState(false);
@@ -39,6 +40,7 @@ const EditInfo = ({ isOwnProfile, profile }) => {
             const user = await updateUser(profile.username, field);
 
             dispatch(updateProfileInfo(user));
+            dispatch(updateAuthInfo(user));
 
             if (didMount) {
                 setIsUpdating(false);
