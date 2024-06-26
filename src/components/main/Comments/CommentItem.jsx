@@ -173,7 +173,7 @@ const CommentItem = (props) => {
                             {/* ------ USERNAME AND COMMENT TEXT ----- */}
                             <div className="bg-gray-100 dark:bg-indigo-950 px-2 py-1 rounded-md flex-grow laptop:flex-grow-0">
                                 <Link className="inline-block" to={`/user/${comment.author.username}`}>
-                                    <h5 className="dark:text-indigo-400">{comment.author.username}</h5>
+                                    <h5 className="dark:text-indigo-400">{(comment.author.firstname && comment.author.lastname) ? `${comment.author.firstname} ${comment.author.lastname}` : comment.author.username}</h5>
                                 </Link>
                                 <p className="text-gray-800 text-sm min-w-full break-all dark:text-gray-200 inline-block">
                                     {comment.body}
