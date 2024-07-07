@@ -1,4 +1,4 @@
-import { GET_USER_SUCCESS, UPDATE_COVER_PHOTO, UPDATE_PROFILE_INFO, UPDATE_PROFILE_PICTURE } from "../../constants/actionType";
+import { GET_USER_SUCCESS, UPDATE_BACKGROUND, UPDATE_COVER_PHOTO, UPDATE_PROFILE_INFO, UPDATE_PROFILE_PICTURE } from "../../constants/actionType";
 
 const initState = {
     _id: '',
@@ -16,6 +16,7 @@ const initState = {
     isEmailValidated: false,
     profilePicture: {},
     coverPhoto: {},
+    background: {},
     followersCount: 0,
     followingCount: 0,
     dateJoined: ''
@@ -29,6 +30,11 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 profilePicture: action.payload
+            }
+        case UPDATE_BACKGROUND:
+            return {
+                ...state,
+                background: action.payload
             }
         case UPDATE_PROFILE_INFO:
             const { payload: user } = action;

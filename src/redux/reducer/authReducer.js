@@ -4,7 +4,8 @@ const initState = {
     id: '',
     username: '',
     fullname: '',
-    profilePicture: {}
+    profilePicture: {},
+    background: {},
 }
 
 const authReducer = (state = initState, action) => {

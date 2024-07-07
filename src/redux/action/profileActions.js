@@ -1,4 +1,4 @@
-import { GET_USER_START, GET_USER_SUCCESS, UPDATE_COVER_PHOTO, UPDATE_PROFILE_INFO, UPDATE_PROFILE_PICTURE, } from "../../constants/actionType";
+import { GET_USER_START, GET_USER_SUCCESS, UPDATE_BACKGROUND, UPDATE_COVER_PHOTO, UPDATE_PROFILE_INFO, UPDATE_PROFILE_PICTURE, } from "../../constants/actionType";
 
 export const getUserStart = (username) => ({
     type: GET_USER_START,
@@ -17,6 +17,11 @@ export const updateProfileInfo = (user) => ({
 
 export const updateProfilePicture = (image) => ({
     type: UPDATE_PROFILE_PICTURE,
+    payload: image
+});
+
+export const updateBackground = (image) => ({
+    type: UPDATE_BACKGROUND,
     payload: image
 });
 

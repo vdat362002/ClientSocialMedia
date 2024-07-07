@@ -1,17 +1,24 @@
 import { HomeOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { withAuth, withTheme } from "../../components/hoc";
 import { LogoutModal, Messages, Notification } from "../../components/main";
-import { Avatar, SearchInput, ThemeToggler } from "../../components/shared";
+import { Avatar, Loader, SearchInput, ThemeToggler } from "../../components/shared";
 import { LOGIN, REGISTER } from "../../constants/routes";
-import { useModal } from "../../hooks";
+import { useFileHandler, useModal } from "../../hooks";
 import logo from "../../images/LogoSocialMedia.png";
+import {FileImageFilled} from "@ant-design/icons";
 import { logoutStart } from "../../redux/action/authActions";
+import CropBackgroundModal from "../main/Modals/CropBackgroundModal";
+import { toast } from "react-toastify";
+import { uploadPhoto } from "../../services/api";
+import { updateBackground } from "../../redux/action/profileActions";
 
 
 const NavBarMobile = lazy(() => import("./NavBarMobile"));
+
+const initImageState = { id: '', file: null, url: '' };
 
 const NavBar = ({ isAuth, theme }) => {
   const dispatch = useDispatch();
@@ -20,13 +27,44 @@ const NavBar = ({ isAuth, theme }) => {
     auth: state.auth,
     error: state.error.authError,
   }));
+  const [isUploadingBackgroundImage, setIsUploadingBackgroundImage] = useState(false);
   const logoutModal = useModal();
   const { pathname } = useLocation();
+  const { isOpen, openModal, closeModal } = useModal();
+  const profilePicture = useFileHandler('single', initImageState);
   const isLaptop = window.screen.width >= 1024;
 
   const onLogout = () => {
     dispatch(logoutStart(logoutModal.closeModal));
   };
+
+  const handleBackgroundFileChange = (e) => {
+    profilePicture.onFileChange(e, () => {
+        openModal();
+    });
+};
+
+  const onCropSuccessCallback = async (file) => {
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    try {
+        setIsUploadingBackgroundImage(true);
+        toast('Uploading...', { hideProgressBar: true, bodyStyle: { color: '#1a1a1a' } });
+
+        const { image } = await uploadPhoto(formData, 'background');
+
+        dispatch(updateBackground(image));
+        setIsUploadingBackgroundImage(false);
+
+        toast.dismiss();
+        toast.dark('Profile picture successfully changed.', { hideProgressBar: true });
+    } catch (e) {
+        console.log(e);
+        setIsUploadingBackgroundImage(false);
+        toast.error(e.error.message);
+    }
+};
 
   const hideNavToPaths = [LOGIN, REGISTER];
 
@@ -93,6 +131,40 @@ const NavBar = ({ isAuth, theme }) => {
                   >
                     Logout
                   </button>
+                  {/* ----- CHANGE BACKGROUND BUTTON ------ */}
+                  <CropBackgroundModal
+                isOpen={isOpen}
+                closeModal={closeModal}
+                openModal={openModal}
+                file={profilePicture.imageFile}
+                onCropSuccessCallback={onCropSuccessCallback}
+            />
+            <input
+                                        type="file"
+                                        hidden
+                                        accept="image/*"
+                                        onChange={handleBackgroundFileChange}
+                                        readOnly={isUploadingBackgroundImage}
+                                        id="background"
+                                    />
+                                    <label
+                                        htmlFor="background"
+                                    >
+
+                  <div
+                    className="ml-2 button--muted !rounded-full dark:bg-indigo-1100 dark:text-white dark:hover:bg-indigo-900 dark:hover:text-white dark:active:bg-indigo-1100"
+                    
+                    >
+                    {isUploadingBackgroundImage ? (
+                      <div className="w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+                                        <Loader mode="light" />
+                                    </div>
+                                )
+                                :
+                                <FileImageFilled />
+                              }
+                  </div> 
+                              </label>
                 </div>
               </>
             ) : (
