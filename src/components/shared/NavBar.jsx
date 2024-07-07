@@ -9,7 +9,7 @@ import { LOGIN, REGISTER } from "../../constants/routes";
 import { useFileHandler, useModal } from "../../hooks";
 import logo from "../../images/LogoSocialMedia.png";
 import {FileImageFilled} from "@ant-design/icons";
-import { logoutStart } from "../../redux/action/authActions";
+import { logoutStart, updateAuthBackground } from "../../redux/action/authActions";
 import CropBackgroundModal from "../main/Modals/CropBackgroundModal";
 import { toast } from "react-toastify";
 import { uploadPhoto } from "../../services/api";
@@ -31,7 +31,7 @@ const NavBar = ({ isAuth, theme }) => {
   const logoutModal = useModal();
   const { pathname } = useLocation();
   const { isOpen, openModal, closeModal } = useModal();
-  const profilePicture = useFileHandler('single', initImageState);
+  const backgroundPicture = useFileHandler('single', initImageState);
   const isLaptop = window.screen.width >= 1024;
 
   const onLogout = () => {
@@ -39,7 +39,7 @@ const NavBar = ({ isAuth, theme }) => {
   };
 
   const handleBackgroundFileChange = (e) => {
-    profilePicture.onFileChange(e, () => {
+    backgroundPicture.onFileChange(e, () => {
         openModal();
     });
 };
@@ -55,10 +55,11 @@ const NavBar = ({ isAuth, theme }) => {
         const { image } = await uploadPhoto(formData, 'background');
 
         dispatch(updateBackground(image));
+        dispatch(updateAuthBackground(image));
         setIsUploadingBackgroundImage(false);
 
         toast.dismiss();
-        toast.dark('Profile picture successfully changed.', { hideProgressBar: true });
+        toast.dark('Background picture successfully changed.', { hideProgressBar: true });
     } catch (e) {
         console.log(e);
         setIsUploadingBackgroundImage(false);
@@ -136,7 +137,7 @@ const NavBar = ({ isAuth, theme }) => {
                 isOpen={isOpen}
                 closeModal={closeModal}
                 openModal={openModal}
-                file={profilePicture.imageFile}
+                file={backgroundPicture.imageFile}
                 onCropSuccessCallback={onCropSuccessCallback}
             />
             <input

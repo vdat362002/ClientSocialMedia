@@ -8,7 +8,8 @@ import {
     REGISTER_START,
     REGISTER_SUCCESS,
     UPDATE_AUTH_PICTURE,
-    UPDATE_AUTH_INFO
+    UPDATE_AUTH_INFO,
+    UPDATE_AUTH_BACKGROUND
 } from "../../constants/actionType";
 
 export const loginStart = (email, password) => ({
@@ -57,6 +58,11 @@ export const checkSession = () => ({
 
 export const updateAuthPicture = (image) => ({
     type: UPDATE_AUTH_PICTURE,
+    payload: image
+});
+
+export const updateAuthBackground = (image) => ({
+    type: UPDATE_AUTH_BACKGROUND,
     payload: image
 });
 

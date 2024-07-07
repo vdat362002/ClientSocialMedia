@@ -105,7 +105,8 @@ function App() {
           backgroundImage: `url(${auth?.background?.url || ''})`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
         }}>
         <ToastContainer
           position='top-right'

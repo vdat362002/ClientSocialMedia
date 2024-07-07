@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UPDATE_AUTH_INFO, UPDATE_AUTH_PICTURE } from '../../constants/actionType';
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UPDATE_AUTH_BACKGROUND, UPDATE_AUTH_INFO, UPDATE_AUTH_PICTURE } from '../../constants/actionType';
 
 const initState = {
     id: '',
@@ -16,6 +16,11 @@ const authReducer = (state = initState, action) => {
             return initState;
         case REGISTER_SUCCESS:
             return action.payload;
+        case UPDATE_AUTH_BACKGROUND:
+            return {
+                ...state,
+                background: action.payload
+            }
         case UPDATE_AUTH_PICTURE:
             return {
                 ...state,
