@@ -74,16 +74,16 @@ const Following = ({ is_page_home, username }) => {
                 </div>
             )}
             {followings.length !== 0 && (
-                <div>
-                    <h4 className="text-gray-700 dark:text-white mb-4 ml-4 mt-4 laptop:mt-0">{is_page_home === true ? "Contact" : "Following"}</h4>
+                <div className="w-full py-4 bg-white dark:bg-indigo-1000 rounded-md shadow-lg overflow-hidden">
                     <TransitionGroup component={null}>
+                    <h4 className="text-gray-700 dark:text-white mb-4 ml-4 mt-4 laptop:mt-0">{is_page_home === true ? "Contact" : "Following"}</h4>
                         {followings.map(user => (
                             <CSSTransition
                                 timeout={500}
                                 classNames="fade"
                                 key={user.id}
                             >
-                                <div className="bg-white dark:bg-indigo-1000 rounded-md mb-4 shadow-md">
+                                <div className="bg-white dark:bg-indigo-1000 rounded-md mb-4">
                                     <UserCard profile={user} is_page_home={true} />
                                 </div>
                             </CSSTransition>

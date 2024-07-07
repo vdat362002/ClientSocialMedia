@@ -37,8 +37,6 @@ const NavBar = ({ isAuth, theme }) => {
     dispatch(logoutStart(logoutModal.closeModal));
   };
 
-  console.log('isOpen', isOpen);
-
   const handleBackgroundFileChange = (e) => {
     backgroundPicture.onFileChange(e, () => {
       openModal();
