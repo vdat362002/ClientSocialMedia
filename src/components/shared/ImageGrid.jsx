@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImageLightbox } from "../../components/main";
 import { useModal } from "../../hooks";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { EyeInvisibleOutlined } from '@ant-design/icons';
 
 const ImageGrid = ({ images }) => {
   const { isOpen, closeModal, openModal } = useModal();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPostVideo, setIsPostVideo] = useState(false);
+  const [showImage, setShowImage] = useState(Array(images.length).fill(false));
 
   const onClickImage = (e) => {
-    if (e.target.dataset) {
+    if (e.target.dataset && !e.target.dataset.isViolence) {
       const idx = e.target.dataset.index;
-
       setActiveIndex(idx);
-      // setting state is async
-      // so we need to add set timeout so that we give the correct index to lightbox
       setTimeout(openModal, 100);
     }
   };
@@ -24,10 +25,7 @@ const ImageGrid = ({ images }) => {
   };
 
   function isMP4(url) {
-    // Regex pattern để kiểm tra phần mở rộng của URL có phải là .mp4 hay không
-    var pattern = /\.mp4($|\?)/i; // Phần mở rộng .mp4, kết thúc hoặc theo sau bởi dấu '?' (query string)
-
-    // Kiểm tra xem URL có khớp với regex pattern hay không
+    var pattern = /\.mp4($|\?)/i;
     return pattern.test(url);
   }
 
@@ -37,92 +35,110 @@ const ImageGrid = ({ images }) => {
     }
   }, [images]);
 
+  const handleShowImage = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const updatedShowImage = [...showImage];
+    updatedShowImage[index] = true;
+    setShowImage(updatedShowImage);
+  };
+
   const renderGrid = () => {
     if (isMP4(images[0])) {
-      return `
-            <div class="custom-grid">
-                <video controls autoplay src=${images[0]} alt="Can't open video" class="grid-img" data-index="0" style="margin-bottom: 20px" />
-            </div>
-        `;
+      return (
+        <div className="custom-grid">
+          <video
+            controls
+            autoPlay
+            src={images[0]}
+            alt="Can't open video"
+            className="grid-img"
+            data-index={0}
+            style={{ marginBottom: 20 }}
+          />
+        </div>
+      );
     }
-    switch (images.length) {
-      case 1:
-        return `
-                    <div class="custom-grid">
-                        <img src=${images[0]} class="grid-img" data-index="0"/>
-                    </div>
-                `;
-      case 2:
-        return `
-                    <div class="custom-grid custom-grid-rows-2">
-                        <img src=${images[0]} class="grid-img" data-index="0"/>
-                        <img src=${images[1]} class="grid-img" data-index="1"/>
-                    </div>
-                `;
-      case 3:
-        return `
-                    <div class="custom-grid custom-grid-rows-2">
-                        <div class="custom-grid">
-                            <img src=${images[0]} class="grid-img" data-index="0"/>
-                        </div>
-                        <div class="custom-grid custom-grid-cols-2">
-                            <img src=${images[1]} class="grid-img" data-index="1"/>
-                            <img src=${images[2]} class="grid-img" data-index="2"/>
-                        </div>
-                    </div>
-                `;
-      case 4:
-        return `
-                    <div class="custom-grid custom-grid-rows-2">
-                        <div class="custom-grid custom-grid-cols-2">
-                            <img src=${images[0]} class="grid-img" data-index="0"/>
-                            <img src=${images[1]} class="grid-img" data-index="1"/>
-                        </div>
-                        <div class="custom-grid custom-grid-cols-2">
-                            <img src=${images[2]} class="grid-img" data-index="2"/>
-                            <img src=${images[3]} class="grid-img" data-index="3"/>
-                        </div>
-                    </div>
-                `;
-      case 5:
-        return `
-                    <div class="custom-grid custom-grid-rows-2">
-                        <div class="custom-grid custom-grid-cols-2">
-                            <img src=${images[0]} class="grid-img" data-index="0" />
-                            <img src=${images[1]} class="grid-img" data-index="1" />
-                        </div>
-                        <div class="custom-grid custom-grid-cols-3">
-                            <img src=${images[2]} class="grid-img" data-index="2" />
-                            <img src=${images[3]} class="grid-img" data-index="3" />
-                            <img src=${images[4]} class="grid-img" data-index="4" />
-                        </div>
-                    </div>
-                `;
-      default:
-        return `
-                    <div class="custom-grid-items custom-grid-items-2">
-                        <img src=${images[0]} class="grid-img"/>
-                    </div>
-                `;
-    }
+
+    const gridStyles = {
+      display: 'grid',
+      gap: '5px',
+      gridTemplateColumns: images.length === 1 ? '1fr' : 'repeat(2, 1fr)',
+      gridTemplateRows: images.length === 3 ? 'repeat(2, 1fr)' : images.length <= 2 ? 'auto' : 'repeat(2, 1fr)',
+    };
+
+    const lastImageIndex = images.length - 1;
+    const isOdd = images.length % 2 !== 0;
+
+    return (
+      <Box style={gridStyles}>
+        {images.map((image, index) => (
+          <Box
+            key={index}
+            className="custom-grid"
+            position="relative"
+            gridColumn={isOdd && index === lastImageIndex ? 'span 2' : 'span 1'}
+          >
+            <img
+              src={image.url}
+              alt="Grid"
+              className="grid-img"
+              data-index={index}
+              data-isViolence={image.isViolence}
+              style={{
+                filter: image.isViolence && !showImage[index] ? "blur(20px)" : "none",
+                cursor: image.isViolence && !showImage[index] ? "default" : "pointer",
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+              onClick={image.isViolence && !showImage[index] ? null : onClickImage}
+            />
+            {image.isViolence && !showImage[index] && (
+              <Box
+                position="absolute"
+                top="0"
+                left="0"
+                width="100%"
+                height="100%"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                bgcolor="rgba(0, 0, 0, 0.5)"
+                zIndex="1"
+                color="white"
+                textAlign="center"
+                p={2}
+                onClick={e => { e.stopPropagation(); }}
+              >
+                <EyeInvisibleOutlined style={{ fontSize: '3rem', color: 'white' }} />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => handleShowImage(e, index)}
+                  style={{ marginTop: 8 }}
+                >
+                  Xem hình ảnh
+                </Button>
+              </Box>
+            )}
+          </Box>
+        ))}
+      </Box>
+    );
   };
+
   return (
     <>
-      <div
-        // className="w-full h-25rem overflow-hidden"
-        className="w-full overflow-hidden"
-        dangerouslySetInnerHTML={{ __html: renderGrid() }}
-        onClick={(e) => {
-          if (!isPostVideo) {
-            onClickImage(e);
-          }
-        }}
-      ></div>
+      <div className="w-full overflow-hidden" onClick={(e) => !isPostVideo && onClickImage(e)}>
+        {renderGrid()}
+      </div>
       <ImageLightbox
         activeIndex={activeIndex}
         isOpen={isOpen}
         closeLightbox={onCloseLightbox}
-        images={images}
+        images={images.filter((image, index) => !image.isViolence || showImage[index])}
       />
     </>
   );

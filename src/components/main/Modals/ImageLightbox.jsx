@@ -4,7 +4,7 @@ import Lightbox from 'react-image-lightbox';
 const ImageLightbox = (props) => {
     const { images, isOpen, closeLightbox, activeIndex } = props;
     const [imgIndex, setImgIndex] = useState(activeIndex);
-
+    console.log(images)
     useEffect(() => {
         setImgIndex(activeIndex);
     }, [activeIndex]);
@@ -20,18 +20,30 @@ const ImageLightbox = (props) => {
     return isOpen ? (
         <div className="relative">
             <Lightbox
-                mainSrc={images[imgIndex]}
-                nextSrc={images[(imgIndex + 1) % images.length]}
-                prevSrc={images[(imgIndex + images.length - 1) % images.length]}
+                mainSrc={images[imgIndex]?.url}
+                nextSrc={images[(imgIndex + 1) % images.length]?.url}
+                prevSrc={images[(imgIndex + images.length - 1) % images.length]?.url}
                 onCloseRequest={closeLightbox}
                 onMovePrevRequest={onPrev}
                 onMoveNextRequest={onNext}
                 enableZoom={false}
                 wrapperClassName="lightbox-wrapper"
                 reactModalStyle={{
+                    overlay: {
+                        zIndex: 9999,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    },
                     content: {
                         zIndex: 9999,
-                        top: '60px'
+                        top: '60px',
+                        // bottom: 'auto',
+                        // left: 'auto',
+                        // right: 'auto',
+                        // marginRight: '-50%',
+                        // transform: 'translate(-50%, -50%)'
                     }
                 }}
             />

@@ -164,9 +164,13 @@ const PostItem = (props) => {
           </p>
         </div>
         {/* --- IMAGE GRID ----- */}
-        {post.photos.length !== 0 && (
+        {/* {post.photos.length !== 0 && (
           <ImageGrid images={post.photos.map((img) => img.url)} />
+        )} */}
+        {post.photos.length !== 0 && (
+          <ImageGrid images={post.photos} />
         )}
+
       </div>
       {/* ---- LIKES/COMMENTS DETAILS ---- */}
       <div className="flex justify-between px-2 my-2">
@@ -299,7 +303,7 @@ const PostItem = (props) => {
       </div>
       {/* --- IMAGE GRID ----- */}
       {post.photos.length !== 0 && (
-        <ImageGrid images={post.photos.map((img) => img.url)} />
+        <ImageGrid images={post.photos} />
       )}
       {/* ---- LIKES/COMMENTS DETAILS ---- */}
       <div className="flex justify-between px-2 my-2">
