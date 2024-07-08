@@ -149,7 +149,7 @@ const NavBar = ({ isAuth, theme }) => {
                     id='background'
                   />
                   <label htmlFor='background'>
-                    <div className='ml-2 button--muted !rounded-full dark:bg-indigo-1100 dark:text-white dark:hover:bg-indigo-900 dark:hover:text-white dark:active:bg-indigo-1100'>
+                    <div className='ml-2 button--muted !rounded-full dark:bg-indigo-1100 cursor-pointer dark:text-white dark:hover:bg-indigo-900 dark:hover:text-white dark:active:bg-indigo-1100'>
                       {isUploadingBackgroundImage ? (
                         <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
                           <Loader mode='light' />
